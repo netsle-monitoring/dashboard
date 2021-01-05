@@ -18,7 +18,8 @@ export function authentication(state = initialState, action) {
     case LOGIN_REQUEST:
       return {
         ...state,
-        status: false,
+        error: null,
+        status: "uninit",
       };
     case LOGIN_SUCCESS:
       return {
