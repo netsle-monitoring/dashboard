@@ -50,11 +50,11 @@ export function refreshToken(token) {
   return (dispatch) => {
     dispatch(request());
     fetch("http://localhost:8000/refresh_token", {
-      method: 'POST',
+      method: "POST",
       body: "",
       headers: {
-        'Refresh-Token': token
-      }
+        "Refresh-Token": token,
+      },
     })
       .then((res) => {
         if (res.status === 400) throw "Invalid Token.";
@@ -76,7 +76,12 @@ export function refreshToken(token) {
     expiry: expiresOn,
     refresh_token: refreshToken,
   }) {
-    return { type: REFRESH_TOKEN_SUCCESS, accessToken, expiresOn, refreshToken };
+    return {
+      type: REFRESH_TOKEN_SUCCESS,
+      accessToken,
+      expiresOn,
+      refreshToken,
+    };
   }
 
   function failure(error) {

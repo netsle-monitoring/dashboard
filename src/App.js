@@ -9,15 +9,16 @@ import LoginPage from "./pages/login";
 import {useDispatch, useSelector} from 'react-redux';
 import { refreshToken } from "./state/actions/user.actions";
 import { useEffect } from "react";
+import LoadingAnimation from "./pages/loadingAnimation";
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {
   const dispatch = useDispatch();
   const refreshAssets = useSelector((state) => state.refreshToken.loginAssets);
   const refreshStatus = useSelector((state) => state.refreshToken.status);
   const localRefreshToken = localStorage.getItem("refreshToken");
+  const localAccessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    console.log("YO BRO", refreshStatus);
     if (refreshStatus === "success") {
       localStorage.setItem("refreshToken", refreshAssets.refreshToken);
       localStorage.setItem("accessToken", refreshAssets.accessToken);
@@ -29,9 +30,12 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
     }
   }, [refreshStatus]);
 
-  let isTokenExpired = (localStorage.getItem("accessTokenExpiresOn") < new Date().getTime() / 1000) && (localStorage.getItem("accessToken") !== null) 
+  let isTokenExpired = ((localStorage.getItem("accessTokenExpiresOn") < new Date().getTime() / 1000) 
+  && (localStorage.getItem("accessToken") !== null) )
+  || isNaN(localStorage.getItem("accessTokenExpiresOn"));
+
   useEffect(() => {
-    if (isTokenExpired && localRefreshToken) {
+    if ((isTokenExpired || !localAccessToken) && localRefreshToken ) {
       dispatch(refreshToken(localStorage.getItem("refreshToken")));
     }
   }, []);
@@ -40,7 +44,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
 
 
   if (refreshStatus !== "success" && isTokenExpired) {
-    return <div>Bitch I'm refreshing your token!</div>
+    return <LoadingAnimation/>;
   }
 
   return <Route

@@ -31,7 +31,7 @@ const LoginPage = () => {
 
   return (
     <div class="flex h-screen bg-gray-800">
-      <div className="m-auto" style={{ marginTop: "30vh" }}>
+      <div className="m-auto">
         <p className="text-xl font-bold text-white">Netsle Dashboard.</p>
         <form
           className="bg-white shadow-md rounded px-32 pt-6 pb-8 mb-4"
