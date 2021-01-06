@@ -62,7 +62,9 @@ export function refreshToken(token) {
         return res.json();
       })
       .then((body) => {
-        dispatch(success(body));
+        setTimeout(() => {
+          dispatch(success(body));
+        }, 5000)
       })
       .catch((e) => dispatch(failure(e)));
   };

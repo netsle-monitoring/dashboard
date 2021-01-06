@@ -2,8 +2,7 @@ import React from "react";
 
 const HomePage = () => {
   return (
-    <div className="grid grid-cols-7">
-      <div class="md:flex flex-col md:flex-row md:min-h-screen w-64 bg-gray-800 col-span-1">
+      <div class="md:flex flex-col md:flex-row md:min-h-screen w-full bg-gray-800 col-span-1 shadow-2xl">
         <div
           class="flex flex-col w-full md:w-64 text-gray-700 bg-gray-900 dark-mode:text-gray-200 dark-mode:bg-gray-800 flex-shrink-0"
         >
@@ -43,10 +42,6 @@ const HomePage = () => {
           </nav>
         </div>
       </div>
-      <div className="col-span-5">
-        TEST
-      </div>
-    </div>
   );
 };
 

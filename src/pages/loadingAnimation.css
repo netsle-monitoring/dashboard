@@ -1,7 +1,7 @@
 .loading {
   height: 150px;
   width: 100%;
-  animation: moveSvg 3s infinite ease-in-out;
+  animation: moveSvg 2s infinite ease-in-out;
 }
 
 @keyframes moveSvg {
@@ -17,25 +17,25 @@
 }
 
 .first_dot {
-    width: 100%;
-    animation: moveFirstDot 3s infinite ease-in-out;
-    opacity: 0.5;
-  }
-  
-.first_dot {
-    width: 100%;
-    animation: moveFirstDot 3s infinite ease-in-out;
-    opacity: 0.2;
+  width: 100%;
+  animation: moveFirstDot 3s infinite ease-in-out;
+  opacity: 0.5;
 }
 
-  @keyframes moveFirstDot {
-    0% {
-      transform: scale(1) rotate(0deg);
-    }
-    50% {
-      transform: scale(1.2) rotate(0deg);
-    }
-    100% {
-      transform: scale(1) rotate(0deg);
-    }
+.first_dot {
+  width: 100%;
+  animation: moveFirstDot 3s infinite ease-in-out;
+  opacity: 0.2;
+}
+
+@keyframes moveFirstDot {
+  0% {
+    transform: scale(1) rotate(0deg);
   }
+  50% {
+    transform: scale(1.9) rotate(0deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
