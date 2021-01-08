@@ -23,7 +23,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
     if (refreshStatus === "success") {
       localStorage.setItem("refreshToken", refreshAssets.refreshToken);
       localStorage.setItem("accessToken", refreshAssets.accessToken);
-      // localStorage.setItem("accessTokenExpiresOn", refreshAssets.expiresOn);
+      localStorage.setItem("accessTokenExpiresOn", refreshAssets.expiresOn);
     } else if (refreshStatus === "error") {
       console.log("There's an error in refresh");
       localStorage.removeItem("refreshToken");
