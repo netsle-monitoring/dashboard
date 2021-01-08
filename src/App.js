@@ -39,7 +39,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
 
   useEffect(() => {
     if ((isTokenExpired || !localAccessToken) && localRefreshToken) {
-      dispatch(refreshToken(localStorage.getItem("refreshToken")));
+      dispatch(refreshToken());
     }
   }, []);
   if (!localRefreshToken) return <Redirect to="/login" />;

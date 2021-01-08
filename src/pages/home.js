@@ -4,24 +4,28 @@ import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 import LoadingAnimation from "./loadingAnimation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react/cjs/react.development";
-import { getPacketCount } from "../state/actions/dashboard.actions";
+import { getPacketGraph, getTotalPackets } from "../state/actions/dashboard.actions";
 import CountUp from "react-countup";
 
 let CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
-    console.log("PAYLOAD", payload);
     return <div className="text-white">{payload[0].payload.count}</div>;
   }
 };
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.packetCount.data || []);
+  const packetCountGraphData = useSelector((state) => state.packetCount.data || []);
+  const totalPacketsCount = useSelector((state) => state.totalPackets.data || 1000);
   const packetCountStatus = useSelector((state) => state.packetCount.status);
 
   useEffect(() => {
-    dispatch(getPacketCount());
-    let i = setInterval(() => dispatch(getPacketCount()), 60000);
+    dispatch(getPacketGraph());
+    dispatch(getTotalPackets());
+    let i = setInterval(() => {
+      dispatch(getPacketGraph());
+      dispatch(getTotalPackets());
+    }, 60000);
     return () => {
       clearInterval(i);
     };
@@ -41,7 +45,7 @@ const HomePage = () => {
             }}
           >
             <ResponsiveContainer>
-              <AreaChart data={data}>
+              <AreaChart data={packetCountGraphData}>
                 <defs>
                   <linearGradient id="packetCount" x1="0" y1="0" x2="0" y2="0">
                     <stop offset="5%" stopColor="#3E1C77" stopOpacity={0.8} />
@@ -61,7 +65,7 @@ const HomePage = () => {
           <div className="flex row-span-2 col-span-3 bg-gradient-to-r from-purple-400 to-purple-600 rounded">
             <div className="m-auto ml-5 mr-5">
               <p className="text-white text-2xl font-bold font-mono overflow-ellipsis overflow-x-hidden">
-                <CountUp end={10000000000000000} separator={","} duration={6} />
+                <CountUp end={totalPacketsCount} separator={","} duration={6} />
               </p>
               <p className="font-bold font-mono text-gray-800 text-xl">
                 Total packets.
