@@ -1,7 +1,7 @@
 import {
-    DASHBOARD_PACKET_COUNT_FAILURE,
-    DASHBOARD_PACKET_COUNT_SUCCESS,
-    DASHBOARD_PACKET_COUNT_REQUEST
+    DASHBOARD_PACKET_GRAPH_FAILURE,
+    DASHBOARD_PACKET_GRAPH_SUCCESS,
+    DASHBOARD_PACKET_GRAPH_REQUEST
   } from "../constants/dashboard.constants";
   
   const initialState = {
@@ -12,19 +12,19 @@ import {
   
   export function packetCount(state = initialState, action) {
     switch (action.type) {
-      case DASHBOARD_PACKET_COUNT_REQUEST:
+      case DASHBOARD_PACKET_GRAPH_REQUEST:
         return {
           ...state,
           error: null,
           status: "pending",
         };
-      case DASHBOARD_PACKET_COUNT_SUCCESS:
+      case DASHBOARD_PACKET_GRAPH_SUCCESS:
         return {
           ...state,
           status: "success",
           data: action.data
         };
-      case DASHBOARD_PACKET_COUNT_FAILURE:
+      case DASHBOARD_PACKET_GRAPH_FAILURE:
         return {
           status: "error",
           error: action.error,

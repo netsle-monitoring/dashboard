@@ -6,27 +6,18 @@ import {
   REFRESH_TOKEN_REQUEST,
   REFRESH_TOKEN_SUCCESS,
 } from "../constants/user.constants";
-
+import ApiService from '../../service/api';
 import { stringify } from "querystring";
 
 export function login(username, password) {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(request());
-    fetch("http://localhost:8000/login", {
-      method: "POST",
-      body: stringify({ username, password }),
-      headers: {
-        "content-type": "application/x-www-form-urlencoded",
-      },
-    })
-      .then((res) => {
-        if (res.status === 400) throw "Invalid Credentials.";
-        return res.json();
-      })
-      .then((body) => {
-        dispatch(success(body));
-      })
-      .catch((e) => dispatch(failure(e)));
+    try {
+      let body = await ApiService.login(username, password);
+      dispatch(success(body));
+    } catch (e) {
+      dispatch(failure(e.message));
+    }
   };
 
   function request() {
@@ -46,27 +37,15 @@ export function login(username, password) {
   }
 }
 
-export function refreshToken(token) {
-  return (dispatch) => {
+export function refreshToken() {
+  return async (dispatch) => {
     dispatch(request());
-    fetch("http://localhost:8000/refresh_token", {
-      method: "POST",
-      body: "",
-      headers: {
-        "Refresh-Token": token,
-      },
-    })
-      .then((res) => {
-        if (res.status === 400) throw "Invalid Token.";
-        if (res.status === 403) throw "Expired Token.";
-        return res.json();
-      })
-      .then((body) => {
-        setTimeout(() => {
-          dispatch(success(body));
-        }, 5000)
-      })
-      .catch((e) => dispatch(failure(e)));
+    try {
+      let body = await ApiService.refresh();
+      dispatch(success(body));
+    } catch (e) {
+      dispatch(failure(e.message));
+    }
   };
 
   function request() {
