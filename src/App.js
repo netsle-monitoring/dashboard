@@ -47,7 +47,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
   if (refreshStatus !== "success" && isTokenExpired) {
     return <LoadingAnimation />;
   }
-  console.log(refreshStatus, isTokenExpired);
+
   return (
     <Route
       {...rest}
@@ -67,7 +67,13 @@ function App() {
     <>
       <Router>
         <Switch>
-          <Route path="/login" exactly component={LoginPage} />
+          <Route path="/login">
+            {!localStorage.getItem("refreshToken") ? (
+              <LoginPage />
+            ) : (
+              <Redirect to="/" />
+            )}
+          </Route>
           <Route path="/">
             <div class="flex flex-col h-screen">
               <NavBar />
