@@ -62,6 +62,25 @@ export default class ApiService {
       throw e;
     }
   }
+
+  static async getDashboardPortsCount() {
+    try {
+      let response = await this.get("dashboard/ports_data", this.getAuthorizationHeader());
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  static async getDashboardTotalUsage() {
+    try {
+      let response = await this.get("dashboard/usage_data", this.getAuthorizationHeader());
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   // Returns the body / error
   static async get(path, headers = {}) {
     try {

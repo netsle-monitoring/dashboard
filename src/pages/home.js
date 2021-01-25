@@ -4,7 +4,7 @@ import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 import LoadingAnimation from "./loadingAnimation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react/cjs/react.development";
-import { getPacketGraph, getTotalPackets } from "../state/actions/dashboard.actions";
+import { getPacketGraph, getTotalPackets, getPortsCount, getTotalUsage } from "../state/actions/dashboard.actions";
 import CountUp from "react-countup";
 
 let CustomTooltip = ({ active, payload, label }) => {
@@ -13,19 +13,36 @@ let CustomTooltip = ({ active, payload, label }) => {
   }
 };
 
+const PORT_NAMES = {
+  "53": "DNS",
+  "443": "HTTPS",
+  "80": "HTTP",
+  "5353": "DNS",
+  "67": "DHCP",
+  "68": "DHCP",
+  "123": "NTP",
+  "139": "SMB",
+  "138": "NetBios",
+  "137": "NetBios",
+}
 const HomePage = () => {
   const dispatch = useDispatch();
   const packetCountGraphData = useSelector((state) => state.packetCount.data || []);
   const totalPacketsCount = useSelector((state) => state.totalPackets.data || 1000);
-  const packetCountStatus = useSelector((state) => state.packetCount.status);
+  const totalUsage = useSelector((state) => state.totalUsage.data || 1000);
+  const portsCount = useSelector((state) => state.portsCount.data || []);
 
   useEffect(() => {
     dispatch(getPacketGraph());
     dispatch(getTotalPackets());
+    dispatch(getTotalUsage());
+    dispatch(getPortsCount());
     let i = setInterval(() => {
       dispatch(getPacketGraph());
+      dispatch(getTotalUsage());
       dispatch(getTotalPackets());
-    }, 60000);
+      dispatch(getPortsCount());
+    }, 800000);
     return () => {
       clearInterval(i);
     };
@@ -75,27 +92,16 @@ const HomePage = () => {
               </p>
             </div>
           </div>
-          <div className="row-span-5 col-span-3 bg-gradient-to-r from-purple-400 to-purple-600 rounded">
+          <div className="row-span-4 col-span-3 bg-gradient-to-r from-purple-400 to-purple-600 rounded">
             <div className="divide-y-2 divide-white divide-dashed">
-              <div className="m-auto ml-5 mr-5 mt-3">
-                <div className="mb-2">
+              <div className="m-auto ml-5 mr-5 mt-8">
+                <div className="mb-10">
                   <p className="text-white text-2xl font-bold font-mono overflow-ellipsis overflow-x-hidden">
-                    <CountUp end={40021} separator={","} duration={6} />
+                    <CountUp end={totalUsage / 1024} separator={","} duration={6} />
                     GB
                   </p>
                   <p className="font-bold font-mono text-gray-80 text-xl">
-                    Upload bandwith.
-                  </p>
-                </div>
-              </div>
-              <div className="m-auto ml-5 mr-5">
-                <div className="mt-2">
-                  <p className="text-white text-2xl font-bold font-mono overflow-ellipsis overflow-x-hidden">
-                    <CountUp end={545454} separator={","} duration={6} />
-                    GB
-                  </p>
-                  <p className="font-bold font-mono text-gray-80 text-xl">
-                    Download bandwith.
+                    Download Usage
                   </p>
                 </div>
               </div>
@@ -105,6 +111,29 @@ const HomePage = () => {
                 A week span.
               </p>
             </div>
+          </div>
+        </div>
+        <div className="flex row-span-6 col-span-6 mt-5 bg-gradient-to-r from-purple-400 to-purple-600 rounded">
+          <div className="mt-10 mb-10 ml-10 mr-5">
+            <div className="grid grid-rows-1 gap-12 grid-cols-12">
+              {console.log(portsCount)}
+              {Object.keys(Object.entries(portsCount)
+                .sort(([, a], [, b]) => a > b)
+                .reduce((r, [k, v]) => ({ ...r, [k]: v }), {})).map(key => {
+                  let count = portsCount[key];
+                  return (<div className="row-span-2 col-span-2 shadow-2xl rounded">
+
+                    <p className="text-yellow-200 text-2xl font-bold font-mono overflow-ellipsis overflow-x-hidden">
+                      {PORT_NAMES[key]} ({key})
+                  </p>
+                    <p className="text-white text-2xl font-bold font-mono overflow-ellipsis overflow-x-hidden">
+                      <CountUp end={count} separator=","/> Packets
+                  </p>
+                  </div>);
+                })}
+
+            </div>
+
           </div>
         </div>
       </div>
