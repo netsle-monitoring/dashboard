@@ -23,7 +23,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
     if (refreshStatus === "success") {
       localStorage.setItem("refreshToken", refreshAssets.refreshToken);
       localStorage.setItem("accessToken", refreshAssets.accessToken);
-      // localStorage.setItem("accessTokenExpiresOn", refreshAssets.expiresOn);
+      localStorage.setItem("accessTokenExpiresOn", refreshAssets.expiresOn);
     } else if (refreshStatus === "error") {
       console.log("There's an error in refresh");
       localStorage.removeItem("refreshToken");
@@ -39,7 +39,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
 
   useEffect(() => {
     if ((isTokenExpired || !localAccessToken) && localRefreshToken) {
-      dispatch(refreshToken(localStorage.getItem("refreshToken")));
+      dispatch(refreshToken());
     }
   }, []);
   if (!localRefreshToken) return <Redirect to="/login" />;
@@ -47,7 +47,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
   if (refreshStatus !== "success" && isTokenExpired) {
     return <LoadingAnimation />;
   }
-  console.log(refreshStatus, isTokenExpired);
+
   return (
     <Route
       {...rest}
@@ -67,7 +67,13 @@ function App() {
     <>
       <Router>
         <Switch>
-          <Route path="/login" exactly component={LoginPage} />
+          <Route path="/login">
+            {!localStorage.getItem("refreshToken") ? (
+              <LoginPage />
+            ) : (
+              <Redirect to="/" />
+            )}
+          </Route>
           <Route path="/">
             <div class="flex flex-col h-screen">
               <NavBar />
