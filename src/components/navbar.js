@@ -1,5 +1,9 @@
 import { ReactComponent as NetsleLogo } from "../logo.svg";
+import { signout } from "../state/actions/user.actions";
+import {useDispatch} from 'react-redux';
+
 const NavBar = () => {
+  const dispatch = useDispatch();
     return (
         <nav class="relative items-center justify-between px-2 py-3 navbar-expand-lg bg-gray-800 shadow-md">
         <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
@@ -39,26 +43,11 @@ const NavBar = () => {
             <ul class="flex flex-col lg:flex-row list-none ml-auto">
               <li class="nav-item">
                 <a
+                onClick={() => dispatch(signout())}
                   class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
                   href="#"
                 >
-                  Discover
-                </a>
-              </li>
-              <li class="nav-item">
-                <a
-                  class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                  href="#"
-                >
-                  Profile
-                </a>
-              </li>
-              <li class="nav-item">
-                <a
-                  class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                  href="#"
-                >
-                  Setting
+                  Signout
                 </a>
               </li>
             </ul>

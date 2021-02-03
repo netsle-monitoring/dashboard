@@ -42,8 +42,9 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
       dispatch(refreshToken());
     }
   }, []);
-  if (!localRefreshToken) return <Redirect to="/login" />;
 
+  if (!localRefreshToken || !localRefreshToken.length)
+    return <Redirect to="/login" />;
   if (refreshStatus !== "success" && isTokenExpired) {
     return <LoadingAnimation />;
   }

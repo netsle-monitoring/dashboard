@@ -81,6 +81,21 @@ export default class ApiService {
     }
   }
 
+  static async signout() {
+    try {
+      let response = await this.get("signout", {
+        "Refresh-Token": `${this.getRefreshToken()}`,
+      });
+
+      localStorage.setItem("refreshToken", "");
+      document.location.href = "/login";
+      return response;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
   // Returns the body / error
   static async get(path, headers = {}) {
     try {
@@ -112,6 +127,7 @@ export default class ApiService {
         body,
         headers
       });
+
       let json = await res.json();
       if (res.status !== 200) {
         throw json;

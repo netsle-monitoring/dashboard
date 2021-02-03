@@ -5,6 +5,9 @@ import {
   REFRESH_TOKEN_FAILURE,
   REFRESH_TOKEN_REQUEST,
   REFRESH_TOKEN_SUCCESS,
+  SIGNOUT_REQUEST,
+  SIGNOUT_SUCCESS,
+  SIGNOUT_FAILURE
 } from "../constants/user.constants";
 import ApiService from '../../service/api';
 import { stringify } from "querystring";
@@ -67,5 +70,31 @@ export function refreshToken() {
 
   function failure(error) {
     return { type: REFRESH_TOKEN_FAILURE, error };
+  }
+}
+
+export function signout() {
+  return async (dispatch) => {
+    dispatch(request());
+    try {
+      let body = await ApiService.signout();
+      dispatch(success());
+    } catch (e) {
+      dispatch(failure(e.message));
+    }
+  };
+
+  function request() {
+    return { type: SIGNOUT_REQUEST };
+  }
+
+  function success() {
+    return {
+      type: SIGNOUT_SUCCESS,
+    };
+  }
+
+  function failure(error) {
+    return { type: SIGNOUT_FAILURE, error };
   }
 }
